@@ -35,7 +35,7 @@ runs:
           ke = parm.split('=')
           if len(ke) == 2:
             v = ssm.get_parameter(Name=ke[0], WithDecryption=decrypt)['Parameter']['Value']
-            print(ke[1]+" - "+v)
+            #print(ke[1]+" - "+v)
             with open(os.environ['GITHUB_ENV'], 'a') as fh:
               delimiter = uuid.uuid1()
               print(f'{ke[1]}<<{delimiter}', file=fh)
