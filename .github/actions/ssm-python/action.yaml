@@ -1,6 +1,6 @@
 name: SSM Python
 inputs:
-  parm-data:
+  parameter-pairs:
     description: Parameter and environment variables
     type: string
     required: false
@@ -27,7 +27,7 @@ runs:
         decrypt = False
         if '${{ inputs.decrypt }}' == 'true':
           decrypt = True
-        data = '${{ inputs.parm-data }}'.split(',')
+        data = '${{ inputs.parameter-pairs }}'.split(',')
         for parm in data:
           ke = parm.split('=')
           if len(ke) == 2:
@@ -38,8 +38,8 @@ runs:
               print(f'{ke[1]}<<{delimiter}', file=fh)
               print(v, file=fh)
               print(delimiter, file=fh)
-    - name: Stuff
-      shell: bash
-      run: |
-        echo ${{ env.ARG1 }}
-        echo ${{ env.ARG2 }}
+    #- name: Stuff
+    #  shell: bash
+    #  run: |
+    #    echo ${{ env.ARG1 }}
+    #    echo ${{ env.ARG2 }}
