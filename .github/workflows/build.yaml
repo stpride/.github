@@ -20,17 +20,11 @@ permissions:
   deployments: write # Required for deployments
 
 jobs:
-  Build:
+  RunIt:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         id: checkout
-        
-      - shell: bash
-        run: |
-          echo "this is" > file.txt
-          echo "a multi line" >> file.txt
-          echo "variable" >> file.txt
 
       - uses: stpride/.github/.github/actions/ssm@main
         id: ssm
