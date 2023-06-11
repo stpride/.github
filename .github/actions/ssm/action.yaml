@@ -32,6 +32,6 @@ runs:
           fi
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
           echo "$var<<$EOF" >> $GITHUB_ENV
-          echo "$var=$(aws ssm get-parameter --name "$parm" "$flag" --query "Parameter.Value" --output text)" >> $GITHUB_ENV
+          echo "$(aws ssm get-parameter --name "$parm" "$flag" --query "Parameter.Value" --output text)" >> $GITHUB_ENV
           echo "$EOF" >> $GITHUB_ENV
         done
