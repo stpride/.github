@@ -1,0 +1,45 @@
+name: SSM Python
+inputs:
+  parm-data:
+    description: Parameter and environment variables
+    type: string
+    required: false
+  decrypt:
+    description: Decrypt the values when retrieving
+    type: string
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Install boto3
+      shell: bash
+      run: pip install boto3
+    - name: Get parameters
+      id: parms
+      shell: python
+      run: |
+        import os
+        import sys
+        import boto3
+        import uuid
+        session = boto3.Session(region_name='us-west-2')
+        ssm = session.client('ssm')
+        decrypt = False
+        if '${{ inputs.decrypt }}' == 'true':
+          decrypt = True
+        data = '${{ inputs.parm-data }}'.split(',')
+        for parm in data:
+          ke = parm.split('=')
+          if len(ke) == 2:
+            v = ssm.get_parameter(Name=ke[0], WithDecryption=decrypt)['Parameter']['Value']
+            print(ke[1]+" - "+v)
+            with open(os.environ['GITHUB_ENV'], 'a') as fh:
+              delimiter = uuid.uuid1()
+              print(f'{ke[1]}<<{delimiter}', file=fh)
+              print(v, file=fh)
+              print(delimiter, file=fh)
+    - name: Stuff
+      shell: bash
+      run: |
+        echo ${{ env.ARG1 }}
+        echo ${{ env.ARG2 }}
