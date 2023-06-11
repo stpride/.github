@@ -1,0 +1,45 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: 'Environment'
+        required: false
+        type: string
+      aws-region:
+        description: "AWS Region to build to"
+        required: false
+        type: string
+
+permissions:
+  actions: read
+  id-token: write  # This is required for requesting the JWT
+  contents: read  # This is required for actions/
+  pull-requests: write
+  deployments: write # Required for deployments
+
+jobs:
+  RunIt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        id: checkout
+
+      - uses: stpride/.github/.github/actions/ssm-python@main
+        id: ssm
+        with:
+          parameter-pairs: '/github-app/test/app.id=ARG1,/github-app/test/app.key=ARG2'
+          decrypt: 'true'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - shell: bash
+        run: |
+          echo 'ARG1 ...'
+          echo "${{ env.ARG1 }}"
+          echo '------------------------'
+          echo 'ARG2 ...'
+          echo "${{ env.ARG2 }}"
