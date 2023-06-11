@@ -23,7 +23,7 @@ runs:
         import boto3
         import uuid
         aws_region = os.getenv('AWS_REGION')
-        if not region:
+        if not aws_region:
           aws_region = 'us-west-2'
         session = boto3.Session(region_name=aws_region)
         ssm = session.client('ssm')
