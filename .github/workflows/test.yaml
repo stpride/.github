@@ -6,3 +6,4 @@ on:
 jobs:
   Build:
     uses: stpride/.github/.github/workflows/build.yaml@main
+    secrets:  inherit
