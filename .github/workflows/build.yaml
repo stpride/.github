@@ -12,7 +12,6 @@ on:
         required: false
         type: string
 
-
 permissions:
   actions: read
   id-token: write  # This is required for requesting the JWT
@@ -26,11 +25,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         id: checkout
+        
+      - shell: bash
+        run: |
+          echo "this is" > file.txt
+          echo "a multi line" >> file.txt
+          echo "variable" >> file.txt
 
-      - uses: FloQastInc/.github/.github/actions/get-ssm-parameters@ATLAS-121
+      - uses: stpride/.github/.github/actions/ssm@main
         id: ssm
         with:
-          parameter-pairs: '/fq6/spride/test1=ARG1,/fq6/spride/test2=ARG2'
+          parameter-pairs: '/github-app/test/app.id=ARG1,/github-app/test/app.key=ARG2'
           decrypt: 'true'
 
       - shell: bash
