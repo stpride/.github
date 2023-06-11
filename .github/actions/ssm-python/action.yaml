@@ -22,7 +22,7 @@ runs:
         import sys
         import boto3
         import uuid
-        session = boto3.Session(region_aws='us-west-2')
+        session = boto3.Session(region_name='us-west-2')
         ssm = session.client('ssm')
         decrypt = False
         if '${{ inputs.decrypt }}' == 'true':
