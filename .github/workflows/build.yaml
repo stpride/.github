@@ -31,6 +31,10 @@ jobs:
         with:
           parameter-pairs: '/github-app/test/app.id=ARG1,/github-app/test/app.key=ARG2'
           decrypt: 'true'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
 
       - shell: bash
         run: |
