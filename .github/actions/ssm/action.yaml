@@ -1,1 +1,37 @@
-blah
+name: Get SSM Parameters Action
+inputs:
+  parameter-pairs:
+    description: Parameter and environment variables
+    type: string
+    required: false
+  decrypt:
+    description: Decrypt the values when retrieving
+    type: string
+    default: true
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install boto3
+      shell: bash -ex {0}
+      run: |
+        flag="--with-decryption"
+        if [ "${{ inputs.decrypt }}" != "true" ]; then
+          flag=""
+        fi
+        data="${{ inputs.parameter-pairs }}"
+        darray=($(echo $data | tr "," "\n"))
+        for i in "${darray[@]}"
+        do
+          parm=$(echo $i | cut -d= -f 1)
+          var=$(echo $i | cut -d= -f 2)
+          if [ "$parm" == "$var" ]; then
+            echo "Invalid parameter format: $i"
+            exit 1
+          fi
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "$var<<$EOF" >> $GITHUB_ENV
+          echo "$var=$(aws ssm get-parameter --name "$parm" "$flag" --query "Parameter.Value" --output text)" >> $GITHUB_ENV
+          echo "$EOF" >> $GITHUB_ENV
+        done
