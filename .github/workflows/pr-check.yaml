@@ -63,44 +63,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         script: |
-          //const prSender = '${{ github.event.pull_request.user.login }}';
           const prLabels = ${{ toJSON(github.event.pull_request.labels.*.name) }};
-          //const eventSender = '${{ github.event.sender.login }}';
-          //const eventAction = '${{ github.event.action }}';
-          //head_ref = '${{ github.event.pull_request.head.ref }}';
-
-          //pr_data = ${{ steps.pr-data.outputs.data }};
-          //commits = pr_data.repository.pullRequest.commits.nodes;
-          //var authors_and_committers = [];
-          //var counter = 0;
-          //while ( counter < commits.length) {
-          //  var author = commits[counter].commit.author.user.login
-          //  if ( commits[counter].commit.committer.user != null ) {
-          //    var committer = commits[counter].commit.committer.user.login
-          //  }
-          //  var commit_message = commits[counter].commit.message
-          //  if ( !commit_message.includes("Merge branch 'main' into " + head_ref)) {
-          //    if ( !authors_and_committers.includes(author)) {
-          //      authors_and_committers.push(author)
-          //    }
-          //    if ( !authors_and_committers.includes(committer)) {
-          //      authors_and_committers.push(committer)
-          //    }
-          //  }
-          //  counter++
-          //}
-
-          //console.log("authors_and_committers: " + authors_and_committers)
-          // required PR close labels
           const requiredPRCloseLabels = ['staging-approved', 'no-deployment'];
-
-          // must be labeled by a validator
-          //if (eventAction == 'labeled' && authors_and_committers.includes(eventSender)) {
-          //    console.error(`PR labels must be added by someone other than ${eventSender}.`);
-          //    process.exit(1);
-          //}
-
-          // one of required PR labels must be present
+          
           if (!requiredPRCloseLabels.some(reqdLabel => prLabels.includes(reqdLabel))) {
               console.error(`PR needs to have one of labels: ${requiredPRCloseLabels.join(', ')}`)
               process.exit(1);
