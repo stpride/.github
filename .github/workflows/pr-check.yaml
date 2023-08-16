@@ -1,0 +1,106 @@
+name: PR Check
+
+on: workflow_call
+
+permissions:
+  actions: read
+  id-token: write  # This is required for requesting the JWT
+  contents: read  # This is required for actions/
+  pull-requests: write
+
+
+jobs:
+  label-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: octokit/graphql-action@75105ddc89d71a35eca847e7a011028198ca6ec5
+      id: pr-data
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        query: |
+          query pullRequest(
+            $repo:String!
+            $owner:String!
+            $number:Int!
+          ) {
+            repository(name: $repo, owner: $owner) {
+              pullRequest(number: $number) {
+                author {
+                  login
+                }
+                commits(last: 100) {
+                  nodes {
+                    commit {
+                    committer {
+                      user {
+                        login
+                      }
+                    }
+                    author {
+                      user {
+                        login
+                      }
+                    }
+                    message
+                    id
+                  }
+                  }
+                  pageInfo {
+                    hasNextPage
+                  }
+                }
+              }
+            }
+          }
+        owner: ${{ github.repository_owner }}
+        repo: ${{ github.event.repository.name }}
+        number: ${{ github.event.pull_request.number }}
+    - name: Run PR Label check
+      uses: actions/github-script@v6
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        script: |
+          const prSender = '${{ github.event.pull_request.user.login }}';
+          const prLabels = ${{ toJSON(github.event.pull_request.labels.*.name) }};
+          const eventSender = '${{ github.event.sender.login }}';
+          const eventAction = '${{ github.event.action }}';
+          head_ref = '${{ github.event.pull_request.head.ref }}';
+
+          pr_data = ${{ steps.pr-data.outputs.data }};
+          commits = pr_data.repository.pullRequest.commits.nodes;
+          var authors_and_committers = [];
+          var counter = 0;
+          while ( counter < commits.length) {
+            var author = commits[counter].commit.author.user.login
+            if ( commits[counter].commit.committer.user != null ) {
+              var committer = commits[counter].commit.committer.user.login
+            }
+            var commit_message = commits[counter].commit.message
+            if ( !commit_message.includes("Merge branch 'main' into " + head_ref)) {
+              if ( !authors_and_committers.includes(author)) {
+                authors_and_committers.push(author)
+              }
+              if ( !authors_and_committers.includes(committer)) {
+                authors_and_committers.push(committer)
+              }
+            }
+            counter++
+          }
+
+          console.log("authors_and_committers: " + authors_and_committers)
+          // required PR close labels
+          const requiredPRCloseLabels = ['staging-approved', 'no-deployment'];
+
+          // must be labeled by a validator
+          if (eventAction == 'labeled' && authors_and_committers.includes(eventSender)) {
+              console.error(`PR labels must be added by someone other than ${eventSender}.`);
+              process.exit(1);
+          }
+
+          // one of required PR labels must be present
+          if (!requiredPRCloseLabels.some(reqdLabel => prLabels.includes(reqdLabel))) {
+              console.error(`PR needs to have one of labels: ${requiredPRCloseLabels.join(', ')}`)
+              process.exit(1);
+          }
