@@ -17,7 +17,7 @@ jobs:
     secrets: inherit
 
   Stuff:
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     steps:
       - name: my-stuff
         shell: bash
