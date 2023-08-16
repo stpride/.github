@@ -1,0 +1,24 @@
+name: Build Something
+
+on:
+  workflow_call:
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+  actions: read
+  deployments: write
+
+jobs:
+  PRCheck:
+    if: github.event_name == 'pull_request'
+    uses: stpride/.github/.github/workflows/pr-check.yaml@main
+    secrets: inherit
+
+  Stuff:
+    runs-on: ubuntu-lates
+    steps:
+      - name: my-stuff
+        shell: bash
+        run: echo "Hello there!"
