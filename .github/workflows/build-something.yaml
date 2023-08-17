@@ -14,10 +14,6 @@ jobs:
   PRCheck:
     uses: stpride/.github/.github/workflows/pr-check.yaml@main
     secrets: inherit
-
-  AnotherCheck:
-    uses: stpride/.github/.github/workflows/pr-check.yaml@main
-    secrets: inherit
     
   Stuff:
     runs-on: ubuntu-latest
