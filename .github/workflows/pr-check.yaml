@@ -12,6 +12,8 @@ permissions:
 jobs:
   label-check:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' &&
+        (github.event.action == 'labeled' || github.event.action == 'unlabeled' || github.event.pull_request.merged == 'true' )
     steps:
     - uses: octokit/graphql-action@75105ddc89d71a35eca847e7a011028198ca6ec5
       id: pr-data
