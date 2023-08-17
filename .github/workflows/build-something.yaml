@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   PRCheck:
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'closed' || (github.event_name == 'pull_request' && github.event.action == 'labeled')
     uses: stpride/.github/.github/workflows/pr-check.yaml@main
     secrets: inherit
 
