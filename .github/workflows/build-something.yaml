@@ -13,7 +13,7 @@ permissions:
 jobs:
   PRCheck:
     if: github.event_name == 'pull_request' &&
-        (github.event.action == 'labeled' || github.event.action == 'unlabeled' || github.event.pull_request.merged )
+        (github.event.action == 'labeled' || github.event.action == 'unlabeled' || github.event.pull_request.merged == 'true' )
     uses: stpride/.github/.github/workflows/pr-check.yaml@main
     secrets: inherit
 
@@ -22,4 +22,8 @@ jobs:
     steps:
       - name: my-stuff
         shell: bash
-        run: echo "Hello there!"
+        run: |
+          echo "Hello there!"
+          echo "event_name = ${{ github.event_name }}"
+          echo "action = ${{ github.event.action }}"
+          echo "merged = ${{ github.event.pull_request.merged }}"
