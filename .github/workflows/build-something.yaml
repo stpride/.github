@@ -15,6 +15,10 @@ jobs:
     uses: stpride/.github/.github/workflows/pr-check.yaml@main
     secrets: inherit
     
+  ForceCheck:
+    uses: stpride/.github/.github/workflows/pr-force-check.yaml@main
+    secrets: inherit
+    
   Stuff:
     runs-on: ubuntu-latest
     steps:
