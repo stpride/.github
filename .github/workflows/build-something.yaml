@@ -12,11 +12,13 @@ permissions:
 
 jobs:
   PRCheck:
-    #if: github.event_name == 'pull_request' &&
-    #    (github.event.action == 'labeled' || github.event.action == 'unlabeled' || github.event.pull_request.merged == 'true' )
     uses: stpride/.github/.github/workflows/pr-check.yaml@main
     secrets: inherit
 
+  AnotherCheck:
+    uses: stpride/.github/.github/workflows/pr-check.yaml@main
+    secrets: inherit
+    
   Stuff:
     runs-on: ubuntu-latest
     steps:
