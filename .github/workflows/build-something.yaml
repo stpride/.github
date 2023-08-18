@@ -22,7 +22,11 @@ jobs:
     steps:
       - name: pre-flight
         shell: bash
-        run: echo "running preflight"
+        run: |
+          echo "Hello there!"
+          echo "event_name = ${{ github.event_name }}"
+          echo "action = ${{ github.event.action }}"
+          echo "merged = ${{ github.event.pull_request.merged }}"
     
   AnotherCheck:
     if: github.event.pull_request.merged == true && github.event.action == 'closed'
