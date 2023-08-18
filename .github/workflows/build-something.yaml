@@ -16,13 +16,34 @@ jobs:
     uses: stpride/.github/.github/workflows/pr-check.yaml@main
     secrets: inherit
 
+  PreFlight:
+    if: (github.event.pull_request.merged == true && github.event.action == 'closed') || contains(fromJSON('["push", "workflow_dispatch"]'), github.event_name)
+    runs-on: ubuntu-latest
+    steps:
+      - name: pre-flight
+        shell: bash
+        run: echo "running preflight"
+    
   AnotherCheck:
     if: github.event.pull_request.merged == true && github.event.action == 'closed'
     uses: stpride/.github/.github/workflows/pr-force-check.yaml@main
     secrets: inherit
     
-  Stuff:
+  Stuff1:
     runs-on: ubuntu-latest
+    needs: [PreFlight, AnotherCheck]
+    steps:
+      - name: my-stuff
+        shell: bash
+        run: |
+          echo "Hello there!"
+          echo "event_name = ${{ github.event_name }}"
+          echo "action = ${{ github.event.action }}"
+          echo "merged = ${{ github.event.pull_request.merged }}"
+
+  Stuff2:
+    runs-on: ubuntu-latest
+    needs: [PreFlight, AnotherCheck]
     steps:
       - name: my-stuff
         shell: bash
