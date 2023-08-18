@@ -15,6 +15,11 @@ jobs:
     if: github.event_name == 'pull_request'
     uses: stpride/.github/.github/workflows/pr-check.yaml@main
     secrets: inherit
+
+  AnotherCheck:
+    if: github.event.pull_request.merged == true && github.event.action == 'closed'
+    uses: stpride/.github/.github/workflows/pr-force-check.yaml@main
+    secrets: inherit
     
   Stuff:
     runs-on: ubuntu-latest
