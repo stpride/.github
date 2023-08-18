@@ -12,62 +12,61 @@ permissions:
 jobs:
   label-check:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' &&
-        (github.event.action == 'labeled' || github.event.action == 'unlabeled' || github.event.pull_request.merged == 'true' )
     steps:
-    - uses: octokit/graphql-action@75105ddc89d71a35eca847e7a011028198ca6ec5
-      id: pr-data
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        query: |
-          query pullRequest(
-            $repo:String!
-            $owner:String!
-            $number:Int!
-          ) {
-            repository(name: $repo, owner: $owner) {
-              pullRequest(number: $number) {
-                author {
-                  login
-                }
-                commits(last: 100) {
-                  nodes {
-                    commit {
-                    committer {
-                      user {
-                        login
+      - uses: octokit/graphql-action@75105ddc89d71a35eca847e7a011028198ca6ec5
+        id: pr-data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          query: |
+            query pullRequest(
+              $repo:String!
+              $owner:String!
+              $number:Int!
+            ) {
+              repository(name: $repo, owner: $owner) {
+                pullRequest(number: $number) {
+                  author {
+                    login
+                  }
+                  commits(last: 100) {
+                    nodes {
+                      commit {
+                        committer {
+                          user {
+                            login
+                          }
+                        }
+                        author {
+                          user {
+                            login
+                          }
+                        }
+                        message
+                        id
                       }
                     }
-                    author {
-                      user {
-                        login
-                      }
+                    pageInfo {
+                      hasNextPage
                     }
-                    message
-                    id
-                  }
-                  }
-                  pageInfo {
-                    hasNextPage
                   }
                 }
               }
             }
-          }
-        owner: ${{ github.repository_owner }}
-        repo: ${{ github.event.repository.name }}
-        number: ${{ github.event.pull_request.number }}
-    - name: Run PR Label check
-      uses: actions/github-script@v6
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        script: |
-          const prLabels = ${{ toJSON(github.event.pull_request.labels.*.name) }};
-          const requiredPRCloseLabels = ['staging-approved', 'no-deployment'];
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          number: ${{ github.event.pull_request.number }}
+      - name: Run PR Label check
+        if: github.event.action == 'labeled' || github.event.action == 'unlabeled'
+        uses: actions/github-script@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            const prLabels = ${{ toJSON(github.event.pull_request.labels.*.name) }};
+            const requiredPRCloseLabels = ['staging-approved', 'no-deployment'];
           
-          if (!requiredPRCloseLabels.some(reqdLabel => prLabels.includes(reqdLabel))) {
+            if (!requiredPRCloseLabels.some(reqdLabel => prLabels.includes(reqdLabel))) {
               console.error(`PR needs to have one of labels: ${requiredPRCloseLabels.join(', ')}`)
               process.exit(1);
-          }
+            }
