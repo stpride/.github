@@ -85,7 +85,7 @@ jobs:
               state: state,
               target_url: `https://github.com/${ owner }/${ repo }/actions/runs/${ context.runId }`,
               description: 'TBD - add something',
-              context: core.getInput( 'status', { required: true } ),
+              context: 'Testing',
             };
 
             if ( process.env.CI ) {
