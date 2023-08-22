@@ -84,7 +84,7 @@ jobs:
               sha: context.payload.pull_request.head.sha,
               state: state,
               target_url: `https://github.com/${ owner }/${ repo }/actions/runs/${ context.runId }`,
-              description: description,
+              description: 'TBD - add something',
               context: core.getInput( 'status', { required: true } ),
             };
 
