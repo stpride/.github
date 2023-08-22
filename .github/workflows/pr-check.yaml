@@ -62,7 +62,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           script: |
-            const core = require( '@actions/core' );
+            //const core = require( '@actions/core' );
             const github = require( '@actions/github' );
             
             const prLabels = ${{ toJSON(github.event.pull_request.labels.*.name) }};
