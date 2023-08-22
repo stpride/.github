@@ -67,7 +67,7 @@ jobs:
             
             const prLabels = ${{ toJSON(github.event.pull_request.labels.*.name) }};
             const requiredPRCloseLabels = ['staging-approved', 'no-deployment'];
-            const state = 'success'
+            let state = 'success'
           
             if (!requiredPRCloseLabels.some(reqdLabel => prLabels.includes(reqdLabel))) {
               console.error(`PR needs to have one of labels: ${requiredPRCloseLabels.join(', ')}`)
