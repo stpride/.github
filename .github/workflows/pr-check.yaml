@@ -81,7 +81,7 @@ jobs:
             const req = {
               owner: owner,
               repo: repo,
-              sha: github.context.payload.pull_request.head.sha,
+              sha: context.payload.pull_request.head.sha,
               state: state,
               target_url: `https://github.com/${ owner }/${ repo }/actions/runs/${ github.context.runId }`,
               description: description,
