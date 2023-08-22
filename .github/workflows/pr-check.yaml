@@ -16,7 +16,7 @@ jobs:
       - uses: octokit/graphql-action@75105ddc89d71a35eca847e7a011028198ca6ec5
         id: pr-data
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
         with:
           query: |
             query pullRequest(
@@ -59,7 +59,7 @@ jobs:
       - name: Run PR Label check
         uses: actions/github-script@v6
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
         with:
           script: |
             //const core = require( '@actions/core' );
