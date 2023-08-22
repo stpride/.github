@@ -76,8 +76,8 @@ jobs:
 
             //const octokit = github.getOctokit( core.getInput( 'token', { required: true } ) );
             //const octokit = github.getOctokit( process.env.GITHUB_TOKEN );
-            const owner = github.context.payload.repository.owner.login;
-            const repo = github.context.payload.repository.name;
+            const owner = context.payload.repository.owner.login;
+            const repo = context.payload.repository.name;
             const req = {
               owner: owner,
               repo: repo,
