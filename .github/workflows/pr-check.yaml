@@ -78,17 +78,17 @@ jobs:
 	    const owner = github.context.payload.repository.owner.login;
             const repo = github.context.payload.repository.name;
             const req = {
-		          owner: owner,
-		          repo: repo,
-		          sha: github.context.payload.pull_request.head.sha,
-		          state: state,
-		          target_url: `https://github.com/${ owner }/${ repo }/actions/runs/${ github.context.runId }`,
-		          description: description,
-		          context: core.getInput( 'status', { required: true } ),
-	          };
+		owner: owner,
+		repo: repo,
+		sha: github.context.payload.pull_request.head.sha,
+		state: state,
+		target_url: `https://github.com/${ owner }/${ repo }/actions/runs/${ github.context.runId }`,
+		description: description,
+		context: core.getInput( 'status', { required: true } ),
+	    };
 
-	          if ( process.env.CI ) {
-		          await octokit.rest.repos.createCommitStatus( req );
-	          } else {
-		          console.dir( req );
-	          }
+	    if ( process.env.CI ) {
+		await octokit.rest.repos.createCommitStatus( req );
+	    } else {
+		console.dir( req );
+	    }
