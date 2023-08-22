@@ -83,7 +83,7 @@ jobs:
               repo: repo,
               sha: context.payload.pull_request.head.sha,
               state: state,
-              target_url: `https://github.com/${ owner }/${ repo }/actions/runs/${ github.context.runId }`,
+              target_url: `https://github.com/${ owner }/${ repo }/actions/runs/${ context.runId }`,
               description: description,
               context: core.getInput( 'status', { required: true } ),
             };
