@@ -63,7 +63,7 @@ jobs:
         with:
           script: |
             //const core = require( '@actions/core' );
-            const github = require( '@actions/github' );
+            //const github = require( '@actions/github' );
             
             const prLabels = ${{ toJSON(github.event.pull_request.labels.*.name) }};
             const requiredPRCloseLabels = ['staging-approved', 'no-deployment'];
