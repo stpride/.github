@@ -71,8 +71,10 @@ jobs:
             const prLabels = ${{ toJSON(github.event.pull_request.labels.*.name) }};
             const requiredPRCloseLabels = ['staging-approved', 'no-deployment'];
             let state = 'success'
+            let description = ''
           
             if (!requiredPRCloseLabels.some(reqdLabel => prLabels.includes(reqdLabel))) {
+              description = 'Missing required label'
               console.error(`PR needs to have one of labels: ${requiredPRCloseLabels.join(', ')}`)
               state = 'pending'
             }
@@ -85,9 +87,9 @@ jobs:
               sha: context.payload.pull_request.head.sha,
               state: state,
               target_url: `https://github.com/${ owner }/${ repo }/actions/runs/${ context.runId }`,
-              description: 'TBD - add something',
-              context: 'Testing',
+              description: description,
+              context: 'Label Check',
             };
 
-            console.dir( req );
+            //console.dir( req );
             await github.rest.repos.createCommitStatus( req );
