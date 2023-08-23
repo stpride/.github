@@ -9,7 +9,6 @@ permissions:
   pull-requests: write
   actions: read
   deployments: write
-  checks: write
   statuses: write
 
 jobs:
