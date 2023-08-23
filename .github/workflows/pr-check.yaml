@@ -2,12 +2,14 @@ name: PR Check
 
 on: workflow_call
 
-permissions:
-  id-token: write  # This is required for requesting the JWT
-  contents: read  # This is required for actions/
-  pull-requests: write
-  actions: read # This is needed for the audit workflow
-  deployments: write # Required for deployments
+permissions: write-all
+#  id-token: write  # This is required for requesting the JWT
+#  contents: read  # This is required for actions/
+#  pull-requests: write
+#  actions: read # This is needed for the audit workflow
+#  deployments: write # Required for deployments
+#  checks: write
+#  statuses: write
 
 jobs:
   label-check:
