@@ -3,12 +3,14 @@ name: Build Something
 on:
   workflow_call:
 
-permissions: write-all
-#  id-token: write
-#  contents: read
-#  pull-requests: write
-#  actions: read
-#  deployments: write
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+  actions: read
+  deployments: write
+  checks: write
+  statuses: write
 
 jobs:
   PRCheck:
