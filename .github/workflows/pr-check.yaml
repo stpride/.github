@@ -61,10 +61,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.MY_TOKEN }}
         with:
-          script: |
-            //const core = require( '@actions/core' );
-            //const github = require( '@actions/github' );
-            
+          script: |            
             const prLabels = ${{ toJSON(github.event.pull_request.labels.*.name) }};
             const requiredPRCloseLabels = ['staging-approved', 'no-deployment'];
             let state = 'success'
@@ -74,8 +71,6 @@ jobs:
               state = 'pending'
             }
 
-            //const octokit = github.getOctokit( core.getInput( 'token', { required: true } ) );
-            //const octokit = github.getOctokit( process.env.GITHUB_TOKEN );
             const owner = context.payload.repository.owner.login;
             const repo = context.payload.repository.name;
             const req = {
@@ -88,9 +83,4 @@ jobs:
               context: 'Testing',
             };
 
-            if ( process.env.CI ) {
-              //await octokit.rest.repos.createCommitStatus( req );
-              await github.rest.repos.createCommitStatus( req );
-            } else {
-              console.dir( req );
-            }
+            await github.rest.repos.createCommitStatus( req );
