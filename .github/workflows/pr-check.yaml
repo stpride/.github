@@ -3,7 +3,7 @@ name: PR Check
 on: workflow_call
 
 jobs:
-  label-check:
+  check-labels:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -79,7 +79,7 @@ jobs:
               state: state,
               target_url: `https://github.com/${ owner }/${ repo }/actions/runs/${ context.runId }`,
               description: description,
-              context: 'Label Check',
+              context: 'BuildSomething / PRCheck / label-check',
             };
 
             //console.dir( req );
