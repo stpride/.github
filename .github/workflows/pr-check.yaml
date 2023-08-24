@@ -1,7 +1,13 @@
 name: PR Check
 
-on: workflow_call
-
+on:
+  workflow_call:
+    inputs:
+      build:
+        description: 'Name of the parent build name'
+        required: true
+        type: string
+        
 jobs:
   check-labels:
     runs-on: ubuntu-latest
@@ -80,7 +86,7 @@ jobs:
               state: state,
               target_url: `https://github.com/${ owner }/${ repo }/actions/runs/${ context.runId }`,
               description: description,
-              context: 'BuildSomething / PRCheck / label-check',
+              context: '${{ inputs.build }} / PRCheck / label-check',
             };
 
             //console.dir( req );
