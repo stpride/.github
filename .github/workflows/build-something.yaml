@@ -16,7 +16,7 @@ jobs:
     if: github.event_name == 'pull_request'
     uses: stpride/.github/.github/workflows/pr-check.yaml@main
     with:
-      build: 'BuildSomething'
+      build: 'BuildSomethings'
     secrets: inherit
 
   PreFlight:
