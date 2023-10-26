@@ -1,0 +1,15 @@
+name: Test1
+
+on: [workflow_call]
+
+permissions:
+  actions: read
+  id-token: write
+  contents: read
+  pull-requests: write
+  deployments: write
+
+jobs:
+  Audit:
+    uses: stpride/.github/.github/workflows/audit.yaml@main
+    secrets: inherit
