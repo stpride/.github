@@ -17,7 +17,7 @@ runs:
           
           // Function to get current filenames 
           // in directory 
-          filenames = fs.readdirSync('src/'); 
+          filenames = fs.readdirSync('src/lambdas/'); 
 
           let results = []
           console.log("\nCurrent directory filenames:"); 
