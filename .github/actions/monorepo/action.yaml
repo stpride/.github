@@ -7,8 +7,24 @@ outputs:
 
 runs:
   using: "composite"
-  steps: 
-    - id: step1
+  steps:
+    - name: get stuff
+      id: step1
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs'); 
+  
+          // Function to get current filenames 
+          // in directory 
+          filenames = fs.readdirSync(__dirname); 
+  
+          console.log("\nCurrent directory filenames:"); 
+          filenames.forEach(file => { 
+            console.log(file); 
+          });
+          
+    - id: step2
       shell: python
       run: |
         import json
