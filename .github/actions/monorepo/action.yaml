@@ -13,15 +13,19 @@ runs:
       uses: actions/github-script@v6
       with:
         script: |
-          const fs = require('fs'); 
-  
+          const fs = require('fs');
+          
           // Function to get current filenames 
           // in directory 
-          filenames = fs.readdirSync('.'); 
-  
+          filenames = fs.readdirSync('src/'); 
+
+          let results = []
           console.log("\nCurrent directory filenames:"); 
           filenames.forEach(file => { 
-            console.log(file); 
+            if( fs.statSync(file).isDirectory() ) {
+              console.log(file);
+              results.push(file);
+            }
           });
           
     - id: step2
