@@ -17,7 +17,7 @@ runs:
   
           // Function to get current filenames 
           // in directory 
-          filenames = fs.readdirSync(__dirname); 
+          filenames = fs.readdirSync('.'); 
   
           console.log("\nCurrent directory filenames:"); 
           filenames.forEach(file => { 
