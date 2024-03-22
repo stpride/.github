@@ -1,10 +1,5 @@
 name: Get list of monorepo lambdas
 description: Return list of monorepo lambdas or empty list if not a monorepo.
-inputs:
-  home_dir: 
-    type: string
-    default: ${{ env.GITHUB_WORKSPACE }}
-    required: false
 
 outputs:
   lambdas:
@@ -21,7 +16,8 @@ runs:
         import os
 
         lambdas = []
-        dir = "${{ inputs.home_dir }}/src/lambdas"
+        #dir = "${{ inputs.home_dir }}/src/lambdas"
+        dir = "src/lambdas"
 
         if os.path.isdir(dir):
           rv = [name for name in os.listdir(dir) if os.path.isdir(os.path.join(dir, name))]
