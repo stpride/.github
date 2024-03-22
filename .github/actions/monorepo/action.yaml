@@ -19,17 +19,16 @@ runs:
         #dir = "${{ inputs.home_dir }}/src/lambdas"
         dir = "src/lambdas"
 
+        count = 0
         if os.path.isdir(dir):
           #  lambdas = [name for name in os.listdir(dir) if os.path.isdir(os.path.join(dir, name))]
-          cnt = 0
           for name in os.listdir(dir):
-            if cnt == 0:
+            if count == 0:
               lambdas = name
             else:
               lambdas = lambdas + "," + name
-            cnt = cnt + 1
+            count = cpunt + 1
 
-        print(lambdas)
         outputs_file = os.getenv("GITHUB_OUTPUT")
         with open(outputs_file, "a") as f:
           f.write(f"lambdas=[{lambdas}]")
