@@ -20,9 +20,9 @@ runs:
         dir = "src/lambdas"
 
         if os.path.isdir(dir):
-          rv = [name for name in os.listdir(dir) if os.path.isdir(os.path.join(dir, name))]
+          lambdas = [name for name in os.listdir(dir) if os.path.isdir(os.path.join(dir, name))]
 
-        print(rv)
+        print(lambdas)
         outputs_file = os.getenv("GITHUB_OUTPUT")
         with open(outputs_file, "a") as f:
-          f.write(f"lambdas="+json.dumps(lambdas))
+          f.write(f"lambdas="+lambdas)
