@@ -32,4 +32,4 @@ runs:
         print(lambdas)
         outputs_file = os.getenv("GITHUB_OUTPUT")
         with open(outputs_file, "a") as f:
-          f.write(f"lambdas={lambdas}")
+          f.write(f"lambdas=goof")
