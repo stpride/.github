@@ -14,7 +14,7 @@ runs:
       with:
         script: |
           const fs = require('fs');
-          const parent = 'src/lambdas';
+          const parent = 'src/lambdas/';
           
           let isDirExist = false;
           try {
