@@ -6,7 +6,6 @@ inputs:
     description: Parent directory containing subdirectories
     type: string
     required: false
-    default: "."
     
 outputs:
   dirs:
@@ -30,12 +29,12 @@ runs:
           } catch(e){}
 
           if( isDirExist ) {
-            filenames = fs.readdirSync('src/lambdas/');
+            filenames = fs.readdirSync('${{ inputs.parent_dir }}');
             filenames.forEach(file => { 
-              if( fs.statSync('${{ inputs.parent_dir }}/'+file).isDirectory() ) {
+              if( fs.statSync('${{ inputs.parent_dir }}'+file).isDirectory() ) {
                 results.push({
                   "name": file,
-                  "full_name": "${{ inputs.parent_dir }}/'+file
+                  "full_name": "${{ inputs.parent_dir }}'+file
                 });
               }
             });
