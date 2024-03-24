@@ -22,10 +22,7 @@ runs:
             isDirExist = true;
           } catch(e){}
           if( isDirExist ) {
-            // Function to get current filenames 
-            // in directory 
             filenames = fs.readdirSync('src/lambdas/');
-            console.log("\nCurrent directory filenames:"); 
             filenames.forEach(file => { 
               if( fs.statSync('src/lambdas/'+file).isDirectory() ) {
                 console.log(file);
