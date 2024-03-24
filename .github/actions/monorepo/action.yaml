@@ -1,11 +1,5 @@
-name: Get list subdirectories
-description: Return list of subdirectories in the given parent directory
-
-inputs:
-  parent_dir:
-    description: Parent directory containing subdirectories
-    type: string
-    required: false
+name: Get monorepo lambdas
+description: Return list of monorepo lambdas or empty list if not a monorepo
     
 outputs:
   dirs:
@@ -20,21 +14,21 @@ runs:
       with:
         script: |
           const fs = require('fs');
+          const parent = 'src/'ambdas';
           
-          let results = []
           let isDirExist = false;
           try {
-            await fs.promises.access("${{ inputs.parent_dir }}");
+            await fs.promises.access(parent);
             isDirExist = true;
           } catch(e){}
 
+          let results = [];
           if( isDirExist ) {
-            filenames = fs.readdirSync('${{ inputs.parent_dir }}');
+            filenames = fs.readdirSync(parent);
             filenames.forEach(file => { 
-              if( fs.statSync('${{ inputs.parent_dir }}'+file).isDirectory() ) {
+              if( fs.statSync(parent+file).isDirectory() ) {
                 results.push({
-                  "name": file,
-                  "full_name": "${{ inputs.parent_dir }}'+file
+                  "name": file
                 });
               }
             });
