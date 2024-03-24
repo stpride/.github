@@ -1,15 +1,21 @@
-name: Get list of monorepo lambdas
-description: Return list of monorepo lambdas or empty list if not a monorepo.
+name: Get list subdirectories
+description: Return list of subdirectories in the given parent directory
 
+inputs:
+  parent_dir:
+    description: Parent directory containing subdirectories
+    type: string
+    required: false
+    default: "."
+    
 outputs:
-  lambdas:
+  dirs:
     value: ${{ steps.step1.outputs.result }}
-    #value: ${{ steps.step1.outputs.lambdas }}
 
 runs:
   using: "composite"
   steps:
-    - name: get stuff
+    - name: Get subdirectories
       id: step1
       uses: actions/github-script@v6
       with:
@@ -19,47 +25,20 @@ runs:
           let results = []
           let isDirExist = false;
           try {
-            await fs.promises.access("src/lambdas/");
+            await fs.promises.access("${{ inputs.parent_dir }}");
             isDirExist = true;
           } catch(e){}
 
           if( isDirExist ) {
-            // Function to get current filenames 
-            // in directory 
             filenames = fs.readdirSync('src/lambdas/');
-
-            console.log("\nCurrent directory filenames:"); 
             filenames.forEach(file => { 
-              if( fs.statSync('src/lambdas/'+file).isDirectory() ) {
-                console.log(file);
+              if( fs.statSync('${{ inputs.parent_dir }}/'+file).isDirectory() ) {
                 results.push({
-                  "name": file
+                  "name": file,
+                  "full_name": "${{ inputs.parent_dir }}/'+file
                 });
               }
             });
           }
 
-          return results;
-          
-    #- id: step2
-    #  shell: python
-    #  run: |
-    #    import json
-    #    import sys
-    #    import os
-
-    #    dir = "src/lambdas"
-    #    count = 0
-    #    lambdas = ""
-    #    if os.path.isdir(dir):
-    #      #  lambdas = [name for name in os.listdir(dir) if os.path.isdir(os.path.join(dir, name))]
-    #      for name in os.listdir(dir):
-    #        if count == 0:
-    #          lambdas = name
-    #        else:
-    #          lambdas = lambdas + "," + name
-    #        count += 1
-
-    #    outputs_file = os.getenv("GITHUB_OUTPUT")
-    #    with open(outputs_file, "a") as f:
-    #      f.write(f"lambdas=[{lambdas}]")
+          return results
