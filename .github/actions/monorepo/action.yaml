@@ -3,7 +3,8 @@ description: Return list of monorepo lambdas or empty list if not a monorepo.
 
 outputs:
   lambdas:
-    value: ${{ steps.step1.outputs.lambdas }}
+    value: ${{ steps.step1.outputs.result }}
+    #value: ${{ steps.step1.outputs.lambdas }}
 
 runs:
   using: "composite"
@@ -31,30 +32,34 @@ runs:
             filenames.forEach(file => { 
               if( fs.statSync('src/lambdas/'+file).isDirectory() ) {
                 console.log(file);
-                results.push(file);
+                results.push({
+                  "name": file
+                });
               }
             });
           }
+
+          return results;
           
-    - id: step2
-      shell: python
-      run: |
-        import json
-        import sys
-        import os
+    #- id: step2
+    #  shell: python
+    #  run: |
+    #    import json
+    #    import sys
+    #    import os
 
-        dir = "src/lambdas"
-        count = 0
-        lambdas = ""
-        if os.path.isdir(dir):
-          #  lambdas = [name for name in os.listdir(dir) if os.path.isdir(os.path.join(dir, name))]
-          for name in os.listdir(dir):
-            if count == 0:
-              lambdas = name
-            else:
-              lambdas = lambdas + "," + name
-            count += 1
+    #    dir = "src/lambdas"
+    #    count = 0
+    #    lambdas = ""
+    #    if os.path.isdir(dir):
+    #      #  lambdas = [name for name in os.listdir(dir) if os.path.isdir(os.path.join(dir, name))]
+    #      for name in os.listdir(dir):
+    #        if count == 0:
+    #          lambdas = name
+    #        else:
+    #          lambdas = lambdas + "," + name
+    #        count += 1
 
-        outputs_file = os.getenv("GITHUB_OUTPUT")
-        with open(outputs_file, "a") as f:
-          f.write(f"lambdas=[{lambdas}]")
+    #    outputs_file = os.getenv("GITHUB_OUTPUT")
+    #    with open(outputs_file, "a") as f:
+    #      f.write(f"lambdas=[{lambdas}]")
