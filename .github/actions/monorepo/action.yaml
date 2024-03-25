@@ -14,7 +14,7 @@ runs:
       with:
         script: |
           const fs = require('fs');
-          const parent = 'src/lambdas/';
+          const parent = '${{ github.workspace }}/src/lambdas/';
           console.log('here: ${{ github.workspace }}');
           
           let results = []
@@ -23,6 +23,7 @@ runs:
             await fs.promises.access(parent);
             isDirExist = true;
           } catch(e){}
+          
           if( isDirExist ) {
             filenames = fs.readdirSync(parent);
             filenames.forEach(file => { 
@@ -34,4 +35,5 @@ runs:
               }
             });
           }
+          
           return results;
